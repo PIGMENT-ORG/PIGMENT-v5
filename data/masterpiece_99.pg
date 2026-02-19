@@ -1,0 +1,376 @@
+-- PIGMENT Genome v5
+-- Generated: 2026-02-18
+-- Generation: 33,600
+-- Fitness: 99.27%
+-- Polygons: 50
+-- Training Samples: 2875
+-- Artist: PIGMENT Evolutionary Engine
+
+canvas {
+  width: 200
+  height: 303
+  format: portrait
+  ground: canvas
+  age: 0yr
+  light: upper-left
+  title: "Evolved Painting"
+  artist: "PIGMENT AI"
+  date: "2026-02-18"
+}
+
+palette {
+  color_0: #000045
+  color_1: #272627
+  color_2: #f68d2b
+  color_3: #532c25
+  color_4: #22008f
+  color_5: #004433
+  color_6: #685327
+  color_7: #000c00
+  color_8: #220000
+  color_9: #500000
+  color_34: #000000
+  color_11: #ffb43f
+  color_12: #000444
+  color_13: #1b0d15
+  color_14: #160100
+  color_15: #030c2f
+  color_16: #000820
+  color_17: #a1a0ab
+  color_18: #ffa84f
+  color_19: #280002
+  color_20: #080003
+  color_21: #6b1318
+  color_22: #a39cb9
+  color_23: #fecb59
+  color_24: #f49e51
+  color_25: #0e0000
+  color_26: #fe8e20
+  color_27: #ffd776
+  color_28: #050007
+  color_29: #000112
+  color_30: #d6bfff
+  color_31: #6c6049
+  color_32: #fffba5
+  color_33: #000b15
+  color_34: #ffef95
+  color_35: #111d39
+  color_36: #020000
+  color_37: #9e705a
+  color_38: #3d7146
+  color_39: #fffbaa
+  color_40: #fddb85
+  color_41: #adcadf
+  color_42: #8b907a
+  color_43: #bdc437
+  color_44: #000002
+  color_45: #00001c
+  color_46: #f36d3e
+}
+
+layer base {
+
+  zone poly_0 {
+    color: palette.color_0
+    opacity: 0.647
+    points: 215.0,320.0 23.5,310.3 210.6,131.1
+  }
+
+  zone poly_1 {
+    color: palette.color_1
+    opacity: 0.243
+    points: 93.0,132.2 -20.0,141.0 49.8,8.1
+  }
+
+  zone poly_2 {
+    color: palette.color_2
+    opacity: 0.537
+    points: 205.3,174.5 31.4,107.3 116.6,-29.7
+  }
+
+  zone poly_3 {
+    color: palette.color_3
+    opacity: 0.647
+    points: 217.4,318.5 18.4,319.1 139.5,173.5
+  }
+
+  zone poly_4 {
+    color: palette.color_4
+    opacity: 0.647
+    points: 220.0,248.6 72.5,229.7 206.0,49.3
+  }
+
+  zone poly_5 {
+    color: palette.color_5
+    opacity: 0.647
+    points: 74.5,330.6 -20.0,312.6 -12.1,108.7
+  }
+
+  zone poly_6 {
+    color: palette.color_6
+    opacity: 0.573
+    points: 213.1,283.5 64.4,218.1 195.2,56.3
+  }
+
+  zone poly_7 {
+    color: palette.color_7
+    opacity: 0.647
+    points: 49.8,279.1 -11.4,326.9 -20.0,151.6
+  }
+
+  zone poly_8 {
+    color: palette.color_8
+    opacity: 0.596
+    points: 220.0,323.0 125.0,296.6 214.4,23.8
+  }
+
+  zone poly_9 {
+    color: palette.color_9
+    opacity: 0.353
+    points: 151.3,149.4 -20.0,84.4 135.0,53.9
+  }
+
+  zone poly_10 {
+    color: palette.color_34
+    opacity: 0.616
+    points: 220.0,260.0 23.2,217.7 100.0,166.0
+  }
+
+  zone poly_11 {
+    color: palette.color_34
+    opacity: 0.561
+    points: 213.0,240.7 -7.6,217.0 204.7,-30.3
+  }
+
+  zone poly_12 {
+    color: palette.color_34
+    opacity: 0.647
+    points: 216.0,13.0 107.9,53.8 51.3,-30.3
+  }
+
+  zone poly_13 {
+    color: palette.color_11
+    opacity: 0.467
+    points: 193.4,-30.3 94.1,108.6 102.1,-29.3
+  }
+
+  zone poly_14 {
+    color: palette.color_12
+    opacity: 0.600
+    points: 64.3,220.2 -89.6,218.2 75.2,44.5
+  }
+
+  zone poly_15 {
+    color: palette.color_13
+    opacity: 0.608
+    points: 124.6,225.1 -7.6,272.2 -20.0,-12.3
+  }
+
+  zone poly_16 {
+    color: palette.color_14
+    opacity: 0.647
+    points: 147.2,48.6 -19.6,16.9 25.5,-30.3
+  }
+
+  zone poly_17 {
+    color: palette.color_15
+    opacity: 0.541
+    points: 220.0,297.7 66.5,333.3 144.4,42.6
+  }
+
+  zone poly_18 {
+    color: palette.color_16
+    opacity: 0.420
+    points: 220.0,34.0 98.9,50.9 140.0,-30.3
+  }
+
+  zone poly_19 {
+    color: palette.color_17
+    opacity: 0.498
+    points: 183.5,78.2 114.5,55.4 200.7,-8.8
+  }
+
+  zone poly_20 {
+    color: palette.color_18
+    opacity: 0.345
+    points: 156.1,162.6 1.5,167.4 71.2,75.5
+  }
+
+  zone poly_21 {
+    color: palette.color_19
+    opacity: 0.208
+    points: 172.9,183.1 14.6,91.8 131.5,36.3
+  }
+
+  zone poly_22 {
+    color: palette.color_20
+    opacity: 0.600
+    points: 76.6,303.8 -11.4,333.3 76.3,14.1
+  }
+
+  zone poly_23 {
+    color: palette.color_21
+    opacity: 0.220
+    points: 127.5,331.7 20.6,310.4 -7.9,68.9
+  }
+
+  zone poly_24 {
+    color: palette.color_22
+    opacity: 0.647
+    points: 185.9,-5.4 -16.1,66.1 3.3,18.9
+  }
+
+  zone poly_25 {
+    color: palette.color_23
+    opacity: 0.310
+    points: 205.6,153.2 44.3,153.4 168.3,101.8
+  }
+
+  zone poly_26 {
+    color: palette.color_24
+    opacity: 0.424
+    points: 33.5,194.9 4.4,189.2 38.2,56.5
+  }
+
+  zone poly_27 {
+    color: palette.color_25
+    opacity: 0.384
+    points: 220.0,251.5 66.6,234.8 146.8,102.8
+  }
+
+  zone poly_28 {
+    color: palette.color_26
+    opacity: 0.420
+    points: 137.6,291.8 43.3,234.6 83.0,220.4
+  }
+
+  zone poly_29 {
+    color: palette.color_27
+    opacity: 0.600
+    points: 96.4,240.8 50.1,241.6 56.0,221.9
+  }
+
+  zone poly_30 {
+    color: palette.color_28
+    opacity: 0.369
+    points: 215.5,333.3 78.0,316.0 161.7,48.6
+  }
+
+  zone poly_31 {
+    color: palette.color_29
+    opacity: 0.647
+    points: 167.2,150.2 113.6,117.2 115.6,8.2
+  }
+
+  zone poly_32 {
+    color: palette.color_30
+    opacity: 0.227
+    points: 191.8,69.3 134.4,49.5 112.3,-10.0
+  }
+
+  zone poly_33 {
+    color: palette.color_31
+    opacity: 0.443
+    points: 199.8,6.1 48.9,48.8 58.4,-30.3
+  }
+
+  zone poly_34 {
+    color: palette.color_32
+    opacity: 0.608
+    points: 122.2,161.0 54.6,159.3 99.8,116.4
+  }
+
+  zone poly_35 {
+    color: palette.color_33
+    opacity: 0.451
+    points: 142.2,265.9 17.5,193.0 -20.0,21.4
+  }
+
+  zone poly_36 {
+    color: palette.color_34
+    opacity: 0.302
+    points: 130.7,42.9 72.9,43.6 100.0,-1.1
+  }
+
+  zone poly_37 {
+    color: palette.color_34
+    opacity: 0.208
+    points: 115.4,94.4 -12.4,53.0 30.0,-23.1
+  }
+
+  zone poly_38 {
+    color: palette.color_35
+    opacity: 0.647
+    points: 99.5,117.8 -19.7,151.4 33.4,53.8
+  }
+
+  zone poly_39 {
+    color: palette.color_36
+    opacity: 0.502
+    points: 162.9,68.8 100.0,69.4 119.8,34.4
+  }
+
+  zone poly_40 {
+    color: palette.color_37
+    opacity: 0.157
+    points: 97.0,85.1 5.8,155.6 17.6,-30.3
+  }
+
+  zone poly_41 {
+    color: palette.color_38
+    opacity: 0.180
+    points: 195.5,181.6 138.1,106.9 199.2,-30.3
+  }
+
+  zone poly_42 {
+    color: palette.color_39
+    opacity: 0.239
+    points: 202.2,77.5 172.9,84.8 158.2,29.0
+  }
+
+  zone poly_43 {
+    color: palette.color_40
+    opacity: 0.306
+    points: 205.1,88.1 89.5,12.3 214.5,10.7
+  }
+
+  zone poly_44 {
+    color: palette.color_41
+    opacity: 0.204
+    points: 154.3,91.8 122.2,22.4 202.0,-15.7
+  }
+
+  zone poly_45 {
+    color: palette.color_42
+    opacity: 0.647
+    points: 220.0,13.2 -17.4,37.9 21.8,-30.3
+  }
+
+  zone poly_46 {
+    color: palette.color_43
+    opacity: 0.157
+    points: 220.0,98.1 134.2,57.2 196.5,3.6
+  }
+
+  zone poly_47 {
+    color: palette.color_44
+    opacity: 0.647
+    points: 220.0,333.3 -3.0,298.6 218.5,216.4
+  }
+
+  zone poly_48 {
+    color: palette.color_45
+    opacity: 0.647
+    points: 76.8,319.7 -6.9,316.6 -20.0,162.1
+  }
+
+  zone poly_49 {
+    color: palette.color_46
+    opacity: 0.251
+    points: 158.7,249.5 84.4,272.7 80.7,236.5
+  }
+}
+
+-- AI Metadata
+-- @training_samples 2875
+-- @best_fitness 99.27
