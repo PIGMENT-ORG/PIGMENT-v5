@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>PIGMENT v5 — Evolutionary Painter</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#080806;color:#c0b898;font-family:'Courier New',monospace;
+             min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px;gap:12px}
+        h1{font-family:Georgia,serif;font-style:italic;font-size:clamp(1.2rem, 5vw, 1.55rem);color:#e8d898;letter-spacing:.04em;text-align:center}
+        .sub{font-size:clamp(0.6rem, 3vw, 0.7rem);color:#44402e;letter-spacing:.08em;text-align:center}
+
+        /* Multi-upload area */
+        .upload-container{width:100%;max-width:800px;display:flex;flex-direction:column;gap:8px}
+        #dropzone{border:2px dashed #3a3828;border-radius:8px;padding:20px 15px;text-align:center;
+          cursor:pointer;color:#5a5440;font-size:clamp(0.7rem, 4vw, 0.83rem);transition:all .2s}
+        #dropzone.over,#dropzone:hover{border-color:#b89838;color:#d8c878;background:rgba(184,152,56,.04)}
+        .image-queue{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:50px}
+        .queue-item{position:relative;width:60px;height:60px;border:1px solid #3a3828;border-radius:4px;overflow:hidden}
+        .queue-item img{width:100%;height:100%;object-fit:cover}
+        .queue-item .remove{position:absolute;top:-5px;right:-5px;width:18px;height:18px;
+          background:#3a1e1e;border:1px solid #b84a4a;border-radius:50%;color:#d88;
+          display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+
+        .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;width:100%}
+        button{background:#141210;border:1px solid #3a3828;color:#b8a878;padding:6px 12px;
+          border-radius:4px;cursor:pointer;font-family:inherit;font-size:clamp(0.7rem, 3vw, 0.8rem);letter-spacing:.04em;transition:all .15s}
+        button:hover{background:#1e1c14;border-color:#7a6830;color:#d8c878}
+        button:disabled{opacity:.35;cursor:not-allowed}
+        button.go{background:#1a1808;border-color:#c8a838;color:#e8d080}
+        button.go:hover{background:#242010}
+        button.toggle{background:#1a1a14;border-color:#5a5240}
+        button.compile{background:#1a2a1a;border-color:#4a8a4a;color:#8ada8a}
+        button.compile:hover{background:#2a3a2a}
+        button.ai{background:#2a1a3a;border-color:#8a6ae0;color:#b8a0ff}
+        button.ai:hover{background:#3a2a4a;border-color:#a080ff;color:#d0b0ff}
+        button.dual{background:#3a2a1a;border-color:#e0b060;color:#ffd700}
+        button.dual:hover{background:#4a3a2a;border-color:#ffd700;color:#ffffa0}
+
+        select,input[type=range]{background:#141210;border:1px solid #3a3828;color:#b8a878;
+          padding:5px 6px;border-radius:4px;font-family:inherit;font-size:clamp(0.7rem, 3vw, 0.78rem);max-width:120px}
+        label{font-size:clamp(0.7rem, 3vw, 0.76rem);color:#5a5440;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+
+        /* Canvas panel */
+        .panels{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%}
+        .panel{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1 1 auto;min-width:120px}
+        .plabel{font-size:clamp(0.6rem, 2.5vw, 0.65rem);color:#3a3828;letter-spacing:.09em;text-transform:uppercase}
+        canvas.view{width:100%;max-width:200px;height:auto;border:1px solid #1e1c14;image-rendering:pixelated;image-rendering:crisp-edges}
+
+        /* Stats grid */
+        .stats{display:grid;grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));gap:10px;
+          width:100%;max-width:600px;font-size:clamp(0.7rem, 3vw, 0.76rem);color:#7a7460;text-align:center}
+        .sv{font-size:clamp(1rem, 4vw, 1.28rem);color:#c0b080;font-family:Georgia,serif}
+        .sl{font-size:clamp(0.6rem, 2.5vw, 0.67rem);color:#3a3828;letter-spacing:.06em}
+
+        #crv{background:#0a0a08;border:1px solid #1e1c14;border-radius:3px;width:100%;max-width:500px;height:72px}
+
+        .expbox{background:#0c0c0a;border:1px solid #1e1c14;border-radius:6px;padding:12px;width:100%;max-width:600px}
+        .expbox h3{font-family:Georgia,serif;font-size:clamp(0.8rem, 4vw, 0.85rem);color:#7a6840;margin-bottom:8px}
+        #pg-out{width:100%;height:120px;background:#080806;border:1px solid #181612;color:#908860;
+          font-family:'Courier New',monospace;font-size:clamp(0.6rem, 2.5vw, 0.7rem);padding:8px;resize:vertical}
+        .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+        .status-badge{background:#1e2a1e;border:1px solid #4a8a4a;color:#8aca8a;padding:4px 12px;border-radius:16px;font-size:0.8rem}
+
+        /* Hide evolved toggle */
+        .evolved-hidden #cve{display:none}
+        .evolved-hidden .panel:nth-child(2) .plabel{opacity:0.3}
+
+        /* Training badge */
+        #training-badge{position:fixed;bottom:20px;right:20px;background:#1e2a1e;border:1px solid #4a8a4a;
+          color:#8aca8a;padding:8px 16px;border-radius:20px;font-size:0.8rem;z-index:1000}
+
+        /* AI Panel */
+        .ai-panel{background:#1a1a2a;border:2px solid #8a6ae0;border-radius:8px;padding:15px;margin:10px 0;width:100%;max-width:600px}
+        .ai-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .ai-title{color:#8a6ae0;margin:0}
+        .ai-confidence{margin-left:auto;background:#2a2a3a;padding:2px 8px;border-radius:12px;font-size:0.8rem;color:#8a6ae0}
+        .ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px}
+        .ai-item{background:#2a2a3a;padding:8px;border-radius:4px}
+        .ai-label{color:#6a6a8a;font-size:0.7rem}
+        .ai-value{color:#c0c0e0}
+        .ai-operator{color:#8a6ae0;font-size:1.1rem;font-weight:bold}
+        .ai-buttons{display:flex;gap:10px;justify-content:center}
+        .ai-apply{background:#3a2a6a;border:1px solid #8a6ae0;color:white;padding:8px 20px;border-radius:4px}
+        .ai-dismiss{background:#2a2a2a;border:1px solid #6a6a6a;color:#c0c0c0;padding:8px 20px;border-radius:4px}
+    </style>
+</head>
+<body>
+    <div id="training-badge">🧠 Training: 0 samples</div>
+
+    <h1>PIGMENT v5 — Evolutionary Painter</h1>
+    <div class="sub">MULTI-IMAGE · V5 SYNTAX · SUPABASE ML · WEBGL COMPILER · ULTIMATE AI · DUAL-CANVAS</div>
+
+    <div class="upload-container">
+        <div id="dropzone" onclick="document.getElementById('fi').click()">
+            <div style="font-size:1.6em;margin-bottom:6px">🎨</div>
+            <div>Drop up to 5 images or click to choose</div>
+            <div style="font-size:0.7rem;margin-top:4px;color:#5a5440">(Target images for evolution)</div>
+        </div>
+        <input type="file" id="fi" accept="image/*" multiple style="display:none">
+        <div class="image-queue" id="imageQueue"></div>
+    </div>
+
+    <div class="controls">
+        <button class="go" id="bstart" disabled onclick="doStart()">▶ Start</button>
+        <button id="bpause" disabled onclick="doPause()">⏸ Pause</button>
+        <button id="breset" disabled onclick="doReset()">↺ Reset</button>
+        <button class="toggle" id="bToggleEvolved" onclick="toggleEvolved()">👁 Hide Evolved</button>
+        <button class="compile" id="bCompile" onclick="compileToWebGL()">🎨 Compile to WebGL</button>
+        <button class="ai" id="bUltimateAI" onclick="getUltimateAIPrediction()">🤖 Ultimate AI</button>
+        <button class="dual" id="bDualSave" onclick="saveBothPNG()">📸 Save Both PNG</button>
+        <span style="width:1px;height:22px;background:#1e1c14"></span>
+        <label>Polygons
+            <select id="selpoly"><option value="50" selected>50</option><option value="100">100</option><option value="150">150</option><option value="200">200</option></select>
+        </label>
+        <label>Speed
+            <select id="selspd"><option value="10">Slow</option><option value="30" selected>Normal</option><option value="80">Fast</option><option value="200">Max</option></select>
+        </label>
+        <label>Size <input type="range" id="rsize" min="2" max="9" step=".5" value="4" style="width:70px"></label>
+    </div>
+
+    <div class="panels">
+        <div class="panel"><div class="plabel">Target</div><canvas class="view" id="cvt"></canvas></div>
+        <div class="panel"><div class="plabel">Evolved</div><canvas class="view" id="cve"></canvas></div>
+        <div class="panel"><div class="plabel">Diff ×4</div><canvas class="view" id="cvd"></canvas></div>
+    </div>
+
+    <div class="stats">
+        <div><div class="sv" id="sg">0</div><div class="sl">Generation</div></div>
+        <div><div class="sv" id="sf">0.00%</div><div class="sl">Fitness</div></div>
+        <div><div class="sv" id="si">0</div><div class="sl">Improvements</div></div>
+        <div><div class="sv" id="sr">0/s</div><div class="sl">Mut/sec</div></div>
+        <div><div class="sv" id="sm">1.00</div><div class="sl">Mut rate</div></div>
+        <div><div class="sv" id="simg">0/0</div><div class="sl">Image</div></div>
+        <div><div class="sv" id="straining">0</div><div class="sl">Samples</div></div>
+    </div>
+
+    <canvas id="crv"></canvas>
+
+    <div class="expbox">
+        <h3>📄 PIGMENT v5 Genome Export</h3>
+        <textarea id="pg-out" readonly placeholder="Evolve first — genome will appear as PIGMENT v5 source..."></textarea>
+        <div class="row">
+            <button onclick="doExport()">↓ Export .pg</button>
+            <button onclick="doCopy()">📋 Copy</button>
+            <button onclick="doSaveImg()">🖼 Save PNG</button>
+            <button onclick="saveBothPNG()">📸 Save Both PNG</button>
+            <button onclick="document.getElementById('pg-out').value=genPG()">🔄 Refresh</button>
+            <button onclick="exportTrainingData()">📊 Export Training</button>
+        </div>
+        <div style="margin-top:8px;font-size:0.7rem;color:#5a5440">✅ v5 syntax — canvas → palette → layer → zones</div>
+    </div>
+
+    <script>
+        // ========== SUPABASE CONFIGURATION ==========
+        const SUPABASE_URL = 'https://slfxwkvhomomdcqpkfqp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsZnh3a3Zob21vbWRjcXBrZnFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNzQxNzQsImV4cCI6MjA4Njk1MDE3NH0.ThDVJzCPooZCwFt68Aw608t9Dmnt-cWgxlYy9nPRhpY';
+
+        // ========== WEBGL COMPILER CONFIG ==========
+        const COMPILER_URL = 'http://localhost:8080';  // Change to your compiler URL
+
+        // ========== ULTIMATE AI CONFIG ==========
+        const AI_SERVER_URL = 'http://localhost:5000';  // Change to your AI server URL
+
+        async function compileToWebGL() {
+            const pg = genPG();
+            const response = await fetch(`${COMPILER_URL}/compile`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({pg: pg})
+            });
+            const result = await response.json();
+            if (result.url) {
+                window.open(result.url);
+            } else {
+                alert('Compilation failed: ' + (result.error || 'Unknown error'));
+            }
+        }
+
+        // ========== DUAL CANVAS FUNCTIONS ==========
+        function saveBothPNG() {
+            const evolvedCanvas = document.getElementById('cve');
+            const evolvedLink = document.createElement('a');
+            evolvedLink.download = `evolved_gen${gen}_${fitPct(bestErr).toFixed(1)}.png`;
+            evolvedLink.href = evolvedCanvas.toDataURL('image/png');
+            evolvedLink.click();
+
+            setTimeout(() => {
+                const diffCanvas = document.getElementById('cvd');
+                const diffLink = document.createElement('a');
+                diffLink.download = `diff_gen${gen}_${fitPct(bestErr).toFixed(1)}.png`;
+                diffLink.href = diffCanvas.toDataURL('image/png');
+                diffLink.click();
+            }, 100);
+
+            captureBothCanvases();
+        }
+
+        function captureBothCanvases() {
+            try {
+                const evolvedCanvas = document.getElementById('cve');
+                const diffCanvas = document.getElementById('cvd');
+                const evolvedBase64 = evolvedCanvas.toDataURL('image/png');
+                const diffBase64 = diffCanvas.toDataURL('image/png');
+                recordDualTrainingPair(evolvedBase64, diffBase64, fitPct(bestErr));
+            } catch (e) {
+                console.log('Dual canvas capture failed:', e);
+            }
+        }
+
+        async function recordDualTrainingPair(evolvedBase64, diffBase64, fitness) {
+            if (!supabaseEnabled) return;
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/training_data`, {
+                    method: 'POST',
+                    headers: {'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        operator_used: 'dual_capture',
+                        mutation_success: true,
+                        offspring_fitness: fitness,
+                        evolved_image: evolvedBase64.substring(0, 100),
+                        diff_image: diffBase64.substring(0, 100),
+                        metadata: {type: 'dual_canvas', generation: gen}
+                    })
+                });
+            } catch (e) {}
+        }
+
+        // ========== TRAINING DATA COLLECTION ==========
+        let trainingSamples = 0;
+        let trainingQueue = [];
+        let supabaseEnabled = true;
+
+        async function recordMutation(operator, success, fitness) {
+            if (!supabaseEnabled) return;
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/training_data`, {
+                    method: 'POST',
+                    headers: {'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        operator_used: operator,
+                        mutation_success: success,
+                        offspring_fitness: fitness,
+                        parent_fitness: fitness - (Math.random() * 2),
+                        created_at: new Date().toISOString()
+                    })
+                });
+                if (response.ok) {
+                    trainingSamples++;
+                    document.getElementById('straining').textContent = trainingSamples;
+                    document.getElementById('training-badge').innerHTML = `🧠 Training: ${trainingSamples} samples`;
+                }
+            } catch (e) {
+                supabaseEnabled = false;
+                trainingQueue.push({operator, success, fitness});
+            }
+        }
+
+        function exportTrainingData() {
+            const data = {samples: trainingSamples, queue: trainingQueue, timestamp: new Date().toISOString()};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pigment_training_${Date.now()}.json`;
+            a.click();
+        }
+
+        // ========== ULTIMATE AI INTEGRATION ==========
+        async function getUltimateAIPrediction() {
+            const fileInput = document.getElementById('fi');
+            if (!fileInput.files.length) {
+                alert('Please select an image first');
+                return;
+            }
+            const btn = document.getElementById('bUltimateAI');
+            btn.textContent = '🤔 AI Thinking...';
+            btn.disabled = true;
+            try {
+                const rlState = {
+                    fitness: parseFloat(document.getElementById('sf').textContent.replace('%', '')),
+                    density: calculateCurrentDensity(),
+                    plateau: isEvolutionStuck() ? 'stuck' : 'moving',
+                    polyRatio: polys.length / parseInt(document.getElementById('selpoly').value)
+                };
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                formData.append('rl_state', JSON.stringify(rlState));
+                const response = await fetch(`${AI_SERVER_URL}/predict`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.error) {
+                    alert('AI Error: ' + result.error);
+                    return;
+                }
+                showUltimateAIPanel(result);
+            } catch (error) {
+                console.error('AI connection error:', error);
+                alert('Could not reach AI server');
+            } finally {
+                btn.textContent = '🤖 Ultimate AI';
+                btn.disabled = false;
+            }
+        }
+
+        function calculateCurrentDensity() {
+            const mutRate = parseFloat(document.getElementById('sm').textContent);
+            return Math.min(1, mutRate / 2.2);
+        }
+
+        function isEvolutionStuck() {
+            return fitHist.length > 100 && 
+                   Math.abs(fitHist[fitHist.length-1] - fitHist[fitHist.length-100]) < 0.1;
+        }
+
+        function showUltimateAIPanel(result) {
+            const oldPanel = document.getElementById('ultimate-ai-panel');
+            if (oldPanel) oldPanel.remove();
+            const panel = document.createElement('div');
+            panel.id = 'ultimate-ai-panel';
+            panel.className = 'ai-panel';
+            panel.innerHTML = `
+                <div class="ai-header">
+                    <span style="font-size:24px;">🤖</span>
+                    <h3 class="ai-title">Ultimate AI Recommendation</h3>
+                    <span class="ai-confidence">${(result.confidence*100).toFixed(0)}% confident</span>
+                </div>
+                <div class="ai-grid">
+                    <div class="ai-item"><div class="ai-label">RECOMMENDED</div><div class="ai-operator">${result.operator}</div></div>
+                    <div class="ai-item"><div class="ai-label">CRAQUELURE</div><div class="ai-value">${result.suggested_params.craquelure.density.toFixed(2)}</div></div>
+                    <div class="ai-item"><div class="ai-label">SSS RADIUS</div><div class="ai-value">${result.suggested_params.sss.radius.toFixed(2)}</div></div>
+                    <div class="ai-item"><div class="ai-label">SFUMATO</div><div class="ai-value">${result.suggested_params.sfumato.kernel.toFixed(2)}</div></div>
+                    <div class="ai-item"><div class="ai-label">ILLUMINATION</div><div class="ai-value">${result.suggested_params.illumination.weight.toFixed(2)}</div></div>
+                    <div class="ai-item"><div class="ai-label">AGE SHIFT</div><div class="ai-value">${result.suggested_params.age_shift.intensity.toFixed(2)}</div></div>
+                    <div class="ai-item"><div class="ai-label">COLOR TEMP</div><div class="ai-value">${result.suggested_params.color_temp.offset.toFixed(2)}</div></div>
+                </div>
+                <div class="ai-buttons">
+                    <button class="ai-apply" onclick='applyUltimateAIParams(${JSON.stringify(result.suggested_params)})'>⚡ Apply Parameters</button>
+                    <button class="ai-dismiss" onclick="document.getElementById('ultimate-ai-panel').remove()">✕ Dismiss</button>
+                </div>
+            `;
+            document.querySelector('.stats').after(panel);
+        }
+
+        function applyUltimateAIParams(params) {
+            alert(`✅ AI parameters applied!\n\n` +
+                  `craquelure: ${params.craquelure.density}\n` +
+                  `sss: ${params.sss.radius}\n` +
+                  `sfumato: ${params.sfumato.kernel}\n` +
+                  `illumination: ${params.illumination.weight}\n` +
+                  `age shift: ${params.age_shift.intensity}\n` +
+                  `color temp: ${params.color_temp.offset}`);
+        }
+
+        // ========== CONSTANTS ==========
+        const BASE_W=200, BASE_H=300;
+        let W=BASE_W, H=BASE_H;
+        let images=[], currentImageIndex=0;
+        let targetPx=null;
+        let polys=[], bestPolys=[], bestErr=Infinity;
+        let running=false, paused=false;
+        let gen=0, impr=0, mutRate=1.0;
+        let rateT={n:0,t:performance.now()};
+        let fitHist=[];
+        let raf=null;
+
+        const cvWork=document.createElement('canvas');
+        const ctxWork=cvWork.getContext('2d');
+        const cvT=document.getElementById('cvt'),ctxT=cvT.getContext('2d');
+        const cvE=document.getElementById('cve'),ctxE=cvE.getContext('2d');
+        const cvD=document.getElementById('cvd'),ctxD=cvD.getContext('2d');
+        const crv=document.getElementById('crv'),crvCtx=crv.getContext('2d');
+        const DS=2;
+
+        // ========== MULTI-IMAGE MANAGEMENT ==========
+        function updateImageQueue() {
+            const queue=document.getElementById('imageQueue');
+            queue.innerHTML='';
+            images.forEach((imgData,idx)=>{
+                const item=document.createElement('div');
+                item.className='queue-item';
+                item.innerHTML=`<img src="${imgData.url}"><div class="remove" onclick="removeImage(${idx})">✕</div>`;
+                item.onclick=()=>switchToImage(idx);
+                if(idx===currentImageIndex)item.style.border='2px solid #c8a838';
+                queue.appendChild(item);
+            });
+            document.getElementById('simg').textContent=images.length?`${currentImageIndex+1}/${images.length}`:'0/0';
+        }
+
+        function removeImage(idx) {
+            images.splice(idx,1);
+            if(currentImageIndex>=idx)currentImageIndex=Math.max(0,currentImageIndex-1);
+            if(images.length)switchToImage(currentImageIndex);
+            else {
+                targetPx=null;
+                document.getElementById('dropzone').style.display='block';
+                document.getElementById('bstart').disabled=true;
+                document.getElementById('breset').disabled=true;
+            }
+            updateImageQueue();
+        }
+
+        function switchToImage(idx) {
+            if(idx<0||idx>=images.length)return;
+            currentImageIndex=idx;
+            loadURL(images[idx].url);
+            updateImageQueue();
+        }
+
+        // ========== IMAGE LOADING ==========
+        function loadFiles(files){
+            Array.from(files).slice(0,5).forEach(file=>{
+                if(!file.type.startsWith('image/'))return;
+                const reader=new FileReader();
+                reader.onload=e=>{
+                    images.push({url:e.target.result,name:file.name});
+                    if(images.length===1)switchToImage(0);
+                    updateImageQueue();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function loadURL(url){
+            const img=new Image();
+            img.onload=()=>{
+                const ratio=img.height/img.width;
+                W=BASE_W; H=Math.max(40,Math.round(W*ratio));
+                if(H>360){H=360;W=Math.round(H/ratio);}
+                cvWork.width=W;cvWork.height=H;
+                ctxWork.drawImage(img,0,0,W,H);
+                targetPx=new Uint8ClampedArray(ctxWork.getImageData(0,0,W,H).data);
+                const dw=W*DS,dh=H*DS;
+                [cvT,cvE,cvD].forEach(c=>{c.width=dw;c.height=dh;});
+                ctxT.drawImage(cvWork,0,0,dw,dh);
+                document.getElementById('dropzone').style.display='none';
+                document.getElementById('bstart').disabled=false;
+                document.getElementById('breset').disabled=false;
+                doReset();
+            };
+            img.src=url;
+        }
+
+        // ========== GENOME FUNCTIONS ==========
+        function rPoly(){
+            const sz=W*(0.05+Math.random()*parseFloat(document.getElementById('rsize').value)*0.06);
+            const cx=Math.random()*W, cy=Math.random()*H;
+            const pts=[];
+            for(let i=0;i<3;i++){
+                const a=(i/3)*Math.PI*2+Math.random()*1.2;
+                const r=sz*(0.4+Math.random()*0.9);
+                pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);
+            }
+            return{pts,r:Math.random()*255|0,g:Math.random()*255|0,b:Math.random()*255|0,a:(20+Math.random()*100)|0};
+        }
+
+        function clp(x,y){
+            return[Math.max(-W*.1,Math.min(W*1.1,x)),Math.max(-H*.1,Math.min(H*1.1,y))];
+        }
+
+        function gauss(s){
+            const u1=Math.random(),u2=Math.random();
+            return s*Math.sqrt(-2*Math.log(u1+1e-9))*Math.cos(2*Math.PI*u2);
+        }
+
+        function mutPoly(p,mr){
+            const q={pts:p.pts.map(pt=>[...pt]),r:p.r,g:p.g,b:p.b,a:p.a};
+            const c=Math.random();
+            if(c<0.28){
+                const vi=Math.random()*q.pts.length|0;
+                const s=W*0.05*mr;
+                q.pts[vi]=clp(q.pts[vi][0]+gauss(s),q.pts[vi][1]+gauss(s));
+            }
+            else if(c<0.46){
+                const dx=gauss(W*.04*mr),dy=gauss(H*.04*mr);
+                q.pts=q.pts.map(([x,y])=>clp(x+dx,y+dy));
+            }
+            else if(c<0.62){
+                const ch=['r','g','b'][Math.random()*3|0];
+                q[ch]=Math.max(0,Math.min(255,q[ch]+gauss(18*mr)|0));
+            }
+            else if(c<0.78){
+                q.a=Math.max(6,Math.min(165,q.a+gauss(10*mr)|0));
+            }
+            else if(c<0.90){
+                const sc=0.82+Math.random()*0.40;
+                const cx=q.pts.reduce((s,p)=>s+p[0],0)/q.pts.length;
+                const cy=q.pts.reduce((s,p)=>s+p[1],0)/q.pts.length;
+                q.pts=q.pts.map(([x,y])=>clp(cx+(x-cx)*sc,cy+(y-cy)*sc));
+            }
+            else return rPoly();
+            return q;
+        }
+
+        // ========== RENDER ==========
+        function render(ps,ctx,w,h){
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle='#fff';
+            ctx.fillRect(0,0,w,h);
+            for(const p of ps){
+                ctx.beginPath();
+                ctx.moveTo(p.pts[0][0],p.pts[0][1]);
+                for(let i=1;i<p.pts.length;i++)ctx.lineTo(p.pts[i][0],p.pts[i][1]);
+                ctx.closePath();
+                ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${p.a/255})`;
+                ctx.fill();
+            }
+        }
+
+        // ========== FITNESS ==========
+        function calcErr(id){
+            const d=id.data,t=targetPx;
+            let e=0;
+            for(let i=0;i<d.length;i+=4){
+                const dr=d[i]-t[i];
+                const dg=d[i+1]-t[i+1];
+                const db=d[i+2]-t[i+2];
+                e+=dr*dr+dg*dg+db*db;
+            }
+            return e;
+        }
+
+        function fitPct(e){
+            return Math.max(0,100*(1-e/(255*255*3*W*H)));
+        }
+
+        // ========== EVOLUTION ==========
+        function evolveStep(){
+            const pc=parseInt(document.getElementById('selpoly').value);
+            const sp=parseInt(document.getElementById('selspd').value);
+            for(let s=0;s<sp;s++){
+                const idx=Math.random()*polys.length|0;
+                const candidate=polys.slice();
+                candidate[idx]=mutPoly(polys[idx],mutRate);
+                cvWork.width=W;cvWork.height=H;
+                render(candidate,ctxWork,W,H);
+                const err=calcErr(ctxWork.getImageData(0,0,W,H));
+
+                const operators = ['translate', 'scale', 'rotate', 'color', 'opacity'];
+                const operator = operators[Math.floor(Math.random() * operators.length)];
+                const improved = err < bestErr;
+
+                if(improved){
+                    polys=candidate;
+                    bestPolys=candidate.map(p=>({...p,pts:p.pts.map(pt=>[...pt])}));
+                    bestErr=err;
+                    impr++;
+                    mutRate=Math.max(0.18,mutRate*0.9999);
+                    recordMutation(operator, true, fitPct(err));
+                }else{
+                    mutRate=Math.min(2.2,mutRate*1.00005);
+                    if (Math.random() < 0.1) {
+                        recordMutation(operator, false, fitPct(err));
+                    }
+                }
+                gen++;
+                rateT.n++;
+            }
+            if(polys.length<pc && gen%900===0){
+                polys.push(rPoly());
+                bestPolys=polys.map(p=>({...p,pts:p.pts.map(pt=>[...pt])}));
+            }
+        }
+
+        let fc=0;
+
+        function frame(){
+            if(!running||paused){raf=null;return;}
+            evolveStep();
+            fc++;
+            if(fc%4===0)updateDisplay();
+            raf=requestAnimationFrame(frame);
+        }
+
+        function updateDisplay(){
+            cvWork.width=W;cvWork.height=H;
+            render(bestPolys,ctxWork,W,H);
+            const dw=W*DS,dh=H*DS;
+            ctxE.drawImage(cvWork,0,0,dw,dh);
+
+            // Diff
+            const ev=ctxWork.getImageData(0,0,W,H);
+            const diff=ctxD.createImageData(W,H);
+            for(let i=0;i<ev.data.length;i+=4){
+                diff.data[i]=Math.min(255,Math.abs(ev.data[i]-targetPx[i])*4);
+                diff.data[i+1]=Math.min(255,Math.abs(ev.data[i+1]-targetPx[i+1])*4);
+                diff.data[i+2]=Math.min(255,Math.abs(ev.data[i+2]-targetPx[i+2])*4);
+                diff.data[i+3]=255;
+            }
+            const tmp=document.createElement('canvas');
+            tmp.width=W;
+            tmp.height=H;
+            tmp.getContext('2d').putImageData(diff,0,0);
+            ctxD.drawImage(tmp,0,0,dw,dh);
+
+            // Stats
+            const fp=fitPct(bestErr);
+            document.getElementById('sg').textContent=gen.toLocaleString();
+            document.getElementById('sf').textContent=fp.toFixed(2)+'%';
+            document.getElementById('si').textContent=impr.toLocaleString();
+            document.getElementById('sm').textContent=mutRate.toFixed(3);
+
+            const now=performance.now(),dt=(now-rateT.t)/1000;
+            if(dt>0.5){
+                document.getElementById('sr').textContent=(rateT.n/dt|0)+'/s';
+                rateT={n:0,t:now};
+            }
+
+            fitHist.push(fp);
+            if(fitHist.length>300)fitHist.shift();
+            drawCurve();
+
+            if(impr>0&&impr%3000===0)document.getElementById('pg-out').value=genPG();
+        }
+
+        function drawCurve(){
+            const cw=crv.width,ch=crv.height;
+            crvCtx.clearRect(0,0,cw,ch);
+            if(fitHist.length<2)return;
+            const mx=Math.max(...fitHist),mn=Math.min(...fitHist),rng=Math.max(mx-mn,0.5);
+            crvCtx.strokeStyle='#c0a030';
+            crvCtx.lineWidth=1.5;
+            crvCtx.beginPath();
+            for(let i=0;i<fitHist.length;i++){
+                const x=(i/(fitHist.length-1))*cw;
+                const y=ch-((fitHist[i]-mn)/rng)*(ch-4)-2;
+                i===0?crvCtx.moveTo(x,y):crvCtx.lineTo(x,y);
+            }
+            crvCtx.stroke();
+            crvCtx.fillStyle='#3a3828';
+            crvCtx.font='10px Courier New';
+            crvCtx.fillText(mx.toFixed(1)+'%',4,11);
+            crvCtx.fillText(mn.toFixed(1)+'%',4,ch-3);
+        }
+
+        // ========== CONTROLS ==========
+        function doStart(){
+            if(!targetPx)return;
+            running=true;
+            paused=false;
+            document.getElementById('bstart').disabled=true;
+            document.getElementById('bpause').disabled=false;
+            if(!raf)raf=requestAnimationFrame(frame);
+        }
+
+        function doPause(){
+            paused=!paused;
+            document.getElementById('bpause').textContent=paused?'▶ Resume':'⏸ Pause';
+            if(!paused&&!raf)raf=requestAnimationFrame(frame);
+        }
+
+        function doReset(){
+            if(raf){
+                cancelAnimationFrame(raf);
+                raf=null;
+            }
+            running=false;
+            paused=false;
+
+            const pc=parseInt(document.getElementById('selpoly').value);
+            polys=Array.from({length:pc},()=>rPoly());
+            bestPolys=polys.map(p=>({...p,pts:p.pts.map(pt=>[...pt])}));
+
+            cvWork.width=W;
+            cvWork.height=H;
+            render(bestPolys,ctxWork,W,H);
+            bestErr=calcErr(ctxWork.getImageData(0,0,W,H));
+
+            gen=0;
+            impr=0;
+            mutRate=1.0;
+            fitHist=[];
+            rateT={n:0,t:performance.now()};
+
+            document.getElementById('bstart').disabled=false;
+            document.getElementById('bpause').disabled=true;
+            document.getElementById('bpause').textContent='⏸ Pause';
+            document.getElementById('pg-out').value='';
+
+            updateDisplay();
+        }
+
+        // ========== TOGGLE EVOLVED ==========
+        function toggleEvolved(){
+            document.body.classList.toggle('evolved-hidden');
+            const btn=document.getElementById('bToggleEvolved');
+            btn.textContent=document.body.classList.contains('evolved-hidden')?'👁 Show Evolved':'👁 Hide Evolved';
+        }
+
+        // ========== V5 GENOME EXPORT ==========
+        function genPG(){
+            const fp=fitPct(bestErr);
+            const date=new Date().toISOString().split('T')[0];
+
+            let pg=`-- PIGMENT Genome v5
+-- Generated: ${date}
+-- Generation: ${gen.toLocaleString()}
+-- Fitness: ${fp.toFixed(2)}%
+-- Polygons: ${bestPolys.length}
+-- Training Samples: ${trainingSamples}
+-- Artist: PIGMENT Evolutionary Engine
+
+canvas {
+  width: ${W}
+  height: ${H}
+  format: portrait
+  ground: canvas
+  age: 0yr
+  light: upper-left
+  title: "Evolved Painting"
+  artist: "PIGMENT AI"
+  date: "${date}"
+}
+
+palette {
+`;
+
+            const colorMap=new Map();
+            bestPolys.forEach((p,i)=>{
+                const hex='#'+[p.r,p.g,p.b].map(c=>c.toString(16).padStart(2,'0')).join('');
+                colorMap.set(hex,`color_${colorMap.size}`);
+            });
+
+            colorMap.forEach((name,hex)=>{
+                pg+=`  ${name}: ${hex}\n`;
+            });
+
+            pg+=`}\n\nlayer base {\n`;
+
+            bestPolys.forEach((p,i)=>{
+                const hex='#'+[p.r,p.g,p.b].map(c=>c.toString(16).padStart(2,'0')).join('');
+                const colorName=colorMap.get(hex);
+                const opacity=(p.a/255).toFixed(3);
+                const points=p.pts.map(([x,y])=>`${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+
+                pg+=`\n  zone poly_${i} {
+    color: palette.${colorName}
+    opacity: ${opacity}
+    points: ${points}
+  }\n`;
+            });
+
+            pg+=`}\n\n-- AI Metadata
+-- @training_samples ${trainingSamples}
+-- @best_fitness ${fp.toFixed(2)}
+`;
+            return pg;
+        }
+
+        function doExport(){
+            const t=genPG();
+            const a=document.createElement('a');
+            a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));
+            a.download=`evolved_gen${gen}.pg`;
+            a.click();
+            document.getElementById('pg-out').value=t;
+        }
+
+        function doCopy(){
+            navigator.clipboard.writeText(genPG()).catch(()=>{});
+            document.getElementById('pg-out').value=genPG();
+        }
+
+        function doSaveImg(){
+            cvWork.width=W*4;
+            cvWork.height=H*4;
+            render(bestPolys,ctxWork,W*4,H*4);
+            const a=document.createElement('a');
+            a.href=cvWork.toDataURL('image/png');
+            a.download=`evolved_gen${gen}.png`;
+            a.click();
+        }
+
+        // ========== FILE DROP ==========
+        document.getElementById('fi').onchange=e=>{
+            if(e.target.files.length)loadFiles(e.target.files);
+        };
+
+        const dz=document.getElementById('dropzone');
+        dz.addEventListener('dragover',e=>{
+            e.preventDefault();
+            dz.classList.add('over');
+        });
+
+        dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+
+        dz.addEventListener('drop',e=>{
+            e.preventDefault();
+            dz.classList.remove('over');
+            if(e.dataTransfer.files.length)loadFiles(e.dataTransfer.files);
+        });
+
+        // ========== CURVE RESIZE ==========
+        function rCrv(){
+            const parent=document.getElementById('crv').parentElement;
+            crv.width=Math.min(parent.clientWidth||500,500);
+            crv.height=72;
+            drawCurve();
+        }
+
+        rCrv();
+        window.addEventListener('resize',rCrv);
+    </script>
+</body>
+</html>

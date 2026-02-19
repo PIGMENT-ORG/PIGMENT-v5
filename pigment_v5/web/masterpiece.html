@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Evolved Painting</title>
+    <style>
+        body { 
+            margin:0; 
+            background:#222; 
+            display:flex; 
+            justify-content:center; 
+            align-items:center; 
+            min-height:100vh;
+            font-family: monospace;
+        }
+        .container { text-align: center; }
+        canvas { 
+            border:2px solid #444;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .info {
+            margin-top: 10px;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas" width="200" height="303"></canvas>
+        <div class="info">
+            PIGMENT v5 · 46 colors · 1 zones · 99.27% fitness
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.moveTo(215.0, 320.0);
+            ctx.lineTo(23.5, 310.3);
+            ctx.lineTo(210.6, 131.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,0,69,0.647)';
+            ctx.fill();
+
+        }
+        draw();
+    </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Evolved Painting</title>
+    <style>
+        body { 
+            margin:0; 
+            background:#222; 
+            display:flex; 
+            justify-content:center; 
+            align-items:center; 
+            min-height:100vh;
+            font-family: monospace;
+        }
+        .container { text-align: center; }
+        canvas { 
+            border:2px solid #444;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .info {
+            margin-top: 10px;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas" width="200" height="303"></canvas>
+        <div class="info">
+            PIGMENT v5 · 46 colors · 50 zones · 99.27% fitness
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Zone poly_0
+            ctx.beginPath();
+            ctx.moveTo(215.0, 320.0);
+            ctx.lineTo(23.5, 310.3);
+            ctx.lineTo(210.6, 131.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,0,69,0.647)';
+            ctx.fill();
+
+            // Zone poly_1
+            ctx.beginPath();
+            ctx.moveTo(93.0, 132.2);
+            ctx.lineTo(-20.0, 141.0);
+            ctx.lineTo(49.8, 8.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(39,38,39,0.243)';
+            ctx.fill();
+
+            // Zone poly_2
+            ctx.beginPath();
+            ctx.moveTo(205.3, 174.5);
+            ctx.lineTo(31.4, 107.3);
+            ctx.lineTo(116.6, -29.7);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(246,141,43,0.537)';
+            ctx.fill();
+
+            // Zone poly_3
+            ctx.beginPath();
+            ctx.moveTo(217.4, 318.5);
+            ctx.lineTo(18.4, 319.1);
+            ctx.lineTo(139.5, 173.5);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(83,44,37,0.647)';
+            ctx.fill();
+
+            // Zone poly_4
+            ctx.beginPath();
+            ctx.moveTo(220.0, 248.6);
+            ctx.lineTo(72.5, 229.7);
+            ctx.lineTo(206.0, 49.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(34,0,143,0.647)';
+            ctx.fill();
+
+            // Zone poly_5
+            ctx.beginPath();
+            ctx.moveTo(74.5, 330.6);
+            ctx.lineTo(-20.0, 312.6);
+            ctx.lineTo(-12.1, 108.7);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,68,51,0.647)';
+            ctx.fill();
+
+            // Zone poly_6
+            ctx.beginPath();
+            ctx.moveTo(213.1, 283.5);
+            ctx.lineTo(64.4, 218.1);
+            ctx.lineTo(195.2, 56.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(104,83,39,0.573)';
+            ctx.fill();
+
+            // Zone poly_7
+            ctx.beginPath();
+            ctx.moveTo(49.8, 279.1);
+            ctx.lineTo(-11.4, 326.9);
+            ctx.lineTo(-20.0, 151.6);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,12,0,0.647)';
+            ctx.fill();
+
+            // Zone poly_8
+            ctx.beginPath();
+            ctx.moveTo(220.0, 323.0);
+            ctx.lineTo(125.0, 296.6);
+            ctx.lineTo(214.4, 23.8);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(34,0,0,0.596)';
+            ctx.fill();
+
+            // Zone poly_9
+            ctx.beginPath();
+            ctx.moveTo(151.3, 149.4);
+            ctx.lineTo(-20.0, 84.4);
+            ctx.lineTo(135.0, 53.9);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(80,0,0,0.353)';
+            ctx.fill();
+
+            // Zone poly_10
+            ctx.beginPath();
+            ctx.moveTo(220.0, 260.0);
+            ctx.lineTo(23.2, 217.7);
+            ctx.lineTo(100.0, 166.0);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,239,149,0.616)';
+            ctx.fill();
+
+            // Zone poly_11
+            ctx.beginPath();
+            ctx.moveTo(213.0, 240.7);
+            ctx.lineTo(-7.6, 217.0);
+            ctx.lineTo(204.7, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,239,149,0.561)';
+            ctx.fill();
+
+            // Zone poly_12
+            ctx.beginPath();
+            ctx.moveTo(216.0, 13.0);
+            ctx.lineTo(107.9, 53.8);
+            ctx.lineTo(51.3, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,239,149,0.647)';
+            ctx.fill();
+
+            // Zone poly_13
+            ctx.beginPath();
+            ctx.moveTo(193.4, -30.3);
+            ctx.lineTo(94.1, 108.6);
+            ctx.lineTo(102.1, -29.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,180,63,0.467)';
+            ctx.fill();
+
+            // Zone poly_14
+            ctx.beginPath();
+            ctx.moveTo(64.3, 220.2);
+            ctx.lineTo(-89.6, 218.2);
+            ctx.lineTo(75.2, 44.5);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,4,68,0.6)';
+            ctx.fill();
+
+            // Zone poly_15
+            ctx.beginPath();
+            ctx.moveTo(124.6, 225.1);
+            ctx.lineTo(-7.6, 272.2);
+            ctx.lineTo(-20.0, -12.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(27,13,21,0.608)';
+            ctx.fill();
+
+            // Zone poly_16
+            ctx.beginPath();
+            ctx.moveTo(147.2, 48.6);
+            ctx.lineTo(-19.6, 16.9);
+            ctx.lineTo(25.5, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(22,1,0,0.647)';
+            ctx.fill();
+
+            // Zone poly_17
+            ctx.beginPath();
+            ctx.moveTo(220.0, 297.7);
+            ctx.lineTo(66.5, 333.3);
+            ctx.lineTo(144.4, 42.6);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(3,12,47,0.541)';
+            ctx.fill();
+
+            // Zone poly_18
+            ctx.beginPath();
+            ctx.moveTo(220.0, 34.0);
+            ctx.lineTo(98.9, 50.9);
+            ctx.lineTo(140.0, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,8,32,0.42)';
+            ctx.fill();
+
+            // Zone poly_19
+            ctx.beginPath();
+            ctx.moveTo(183.5, 78.2);
+            ctx.lineTo(114.5, 55.4);
+            ctx.lineTo(200.7, -8.8);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(161,160,171,0.498)';
+            ctx.fill();
+
+            // Zone poly_20
+            ctx.beginPath();
+            ctx.moveTo(156.1, 162.6);
+            ctx.lineTo(1.5, 167.4);
+            ctx.lineTo(71.2, 75.5);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,168,79,0.345)';
+            ctx.fill();
+
+            // Zone poly_21
+            ctx.beginPath();
+            ctx.moveTo(172.9, 183.1);
+            ctx.lineTo(14.6, 91.8);
+            ctx.lineTo(131.5, 36.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(40,0,2,0.208)';
+            ctx.fill();
+
+            // Zone poly_22
+            ctx.beginPath();
+            ctx.moveTo(76.6, 303.8);
+            ctx.lineTo(-11.4, 333.3);
+            ctx.lineTo(76.3, 14.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(8,0,3,0.6)';
+            ctx.fill();
+
+            // Zone poly_23
+            ctx.beginPath();
+            ctx.moveTo(127.5, 331.7);
+            ctx.lineTo(20.6, 310.4);
+            ctx.lineTo(-7.9, 68.9);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(107,19,24,0.22)';
+            ctx.fill();
+
+            // Zone poly_24
+            ctx.beginPath();
+            ctx.moveTo(185.9, -5.4);
+            ctx.lineTo(-16.1, 66.1);
+            ctx.lineTo(3.3, 18.9);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(163,156,185,0.647)';
+            ctx.fill();
+
+            // Zone poly_25
+            ctx.beginPath();
+            ctx.moveTo(205.6, 153.2);
+            ctx.lineTo(44.3, 153.4);
+            ctx.lineTo(168.3, 101.8);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(254,203,89,0.31)';
+            ctx.fill();
+
+            // Zone poly_26
+            ctx.beginPath();
+            ctx.moveTo(33.5, 194.9);
+            ctx.lineTo(4.4, 189.2);
+            ctx.lineTo(38.2, 56.5);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(244,158,81,0.424)';
+            ctx.fill();
+
+            // Zone poly_27
+            ctx.beginPath();
+            ctx.moveTo(220.0, 251.5);
+            ctx.lineTo(66.6, 234.8);
+            ctx.lineTo(146.8, 102.8);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(14,0,0,0.384)';
+            ctx.fill();
+
+            // Zone poly_28
+            ctx.beginPath();
+            ctx.moveTo(137.6, 291.8);
+            ctx.lineTo(43.3, 234.6);
+            ctx.lineTo(83.0, 220.4);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(254,142,32,0.42)';
+            ctx.fill();
+
+            // Zone poly_29
+            ctx.beginPath();
+            ctx.moveTo(96.4, 240.8);
+            ctx.lineTo(50.1, 241.6);
+            ctx.lineTo(56.0, 221.9);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,215,118,0.6)';
+            ctx.fill();
+
+            // Zone poly_30
+            ctx.beginPath();
+            ctx.moveTo(215.5, 333.3);
+            ctx.lineTo(78.0, 316.0);
+            ctx.lineTo(161.7, 48.6);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(5,0,7,0.369)';
+            ctx.fill();
+
+            // Zone poly_31
+            ctx.beginPath();
+            ctx.moveTo(167.2, 150.2);
+            ctx.lineTo(113.6, 117.2);
+            ctx.lineTo(115.6, 8.2);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,1,18,0.647)';
+            ctx.fill();
+
+            // Zone poly_32
+            ctx.beginPath();
+            ctx.moveTo(191.8, 69.3);
+            ctx.lineTo(134.4, 49.5);
+            ctx.lineTo(112.3, -10.0);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(214,191,255,0.227)';
+            ctx.fill();
+
+            // Zone poly_33
+            ctx.beginPath();
+            ctx.moveTo(199.8, 6.1);
+            ctx.lineTo(48.9, 48.8);
+            ctx.lineTo(58.4, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(108,96,73,0.443)';
+            ctx.fill();
+
+            // Zone poly_34
+            ctx.beginPath();
+            ctx.moveTo(122.2, 161.0);
+            ctx.lineTo(54.6, 159.3);
+            ctx.lineTo(99.8, 116.4);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,251,165,0.608)';
+            ctx.fill();
+
+            // Zone poly_35
+            ctx.beginPath();
+            ctx.moveTo(142.2, 265.9);
+            ctx.lineTo(17.5, 193.0);
+            ctx.lineTo(-20.0, 21.4);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,11,21,0.451)';
+            ctx.fill();
+
+            // Zone poly_36
+            ctx.beginPath();
+            ctx.moveTo(130.7, 42.9);
+            ctx.lineTo(72.9, 43.6);
+            ctx.lineTo(100.0, -1.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,239,149,0.302)';
+            ctx.fill();
+
+            // Zone poly_37
+            ctx.beginPath();
+            ctx.moveTo(115.4, 94.4);
+            ctx.lineTo(-12.4, 53.0);
+            ctx.lineTo(30.0, -23.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,239,149,0.208)';
+            ctx.fill();
+
+            // Zone poly_38
+            ctx.beginPath();
+            ctx.moveTo(99.5, 117.8);
+            ctx.lineTo(-19.7, 151.4);
+            ctx.lineTo(33.4, 53.8);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(17,29,57,0.647)';
+            ctx.fill();
+
+            // Zone poly_39
+            ctx.beginPath();
+            ctx.moveTo(162.9, 68.8);
+            ctx.lineTo(100.0, 69.4);
+            ctx.lineTo(119.8, 34.4);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(2,0,0,0.502)';
+            ctx.fill();
+
+            // Zone poly_40
+            ctx.beginPath();
+            ctx.moveTo(97.0, 85.1);
+            ctx.lineTo(5.8, 155.6);
+            ctx.lineTo(17.6, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(158,112,90,0.157)';
+            ctx.fill();
+
+            // Zone poly_41
+            ctx.beginPath();
+            ctx.moveTo(195.5, 181.6);
+            ctx.lineTo(138.1, 106.9);
+            ctx.lineTo(199.2, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(61,113,70,0.18)';
+            ctx.fill();
+
+            // Zone poly_42
+            ctx.beginPath();
+            ctx.moveTo(202.2, 77.5);
+            ctx.lineTo(172.9, 84.8);
+            ctx.lineTo(158.2, 29.0);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255,251,170,0.239)';
+            ctx.fill();
+
+            // Zone poly_43
+            ctx.beginPath();
+            ctx.moveTo(205.1, 88.1);
+            ctx.lineTo(89.5, 12.3);
+            ctx.lineTo(214.5, 10.7);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(253,219,133,0.306)';
+            ctx.fill();
+
+            // Zone poly_44
+            ctx.beginPath();
+            ctx.moveTo(154.3, 91.8);
+            ctx.lineTo(122.2, 22.4);
+            ctx.lineTo(202.0, -15.7);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(173,202,223,0.204)';
+            ctx.fill();
+
+            // Zone poly_45
+            ctx.beginPath();
+            ctx.moveTo(220.0, 13.2);
+            ctx.lineTo(-17.4, 37.9);
+            ctx.lineTo(21.8, -30.3);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(139,144,122,0.647)';
+            ctx.fill();
+
+            // Zone poly_46
+            ctx.beginPath();
+            ctx.moveTo(220.0, 98.1);
+            ctx.lineTo(134.2, 57.2);
+            ctx.lineTo(196.5, 3.6);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(189,196,55,0.157)';
+            ctx.fill();
+
+            // Zone poly_47
+            ctx.beginPath();
+            ctx.moveTo(220.0, 333.3);
+            ctx.lineTo(-3.0, 298.6);
+            ctx.lineTo(218.5, 216.4);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,0,2,0.647)';
+            ctx.fill();
+
+            // Zone poly_48
+            ctx.beginPath();
+            ctx.moveTo(76.8, 319.7);
+            ctx.lineTo(-6.9, 316.6);
+            ctx.lineTo(-20.0, 162.1);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,0,28,0.647)';
+            ctx.fill();
+
+            // Zone poly_49
+            ctx.beginPath();
+            ctx.moveTo(158.7, 249.5);
+            ctx.lineTo(84.4, 272.7);
+            ctx.lineTo(80.7, 236.5);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(243,109,62,0.251)';
+            ctx.fill();
+
+        }
+        draw();
+    </script>
+</body>
+</html>
