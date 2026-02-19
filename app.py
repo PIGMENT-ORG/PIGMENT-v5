@@ -2,11 +2,11 @@
 import os
 import sys
 
-# Add pigment_v5 to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'pigment_v5'))
+# Add current directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Import from pigment_v5.server
-from pigment_v5.server.ai_server_dual import app
+# Import from server at root
+from server.ai_server_dual import app
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
